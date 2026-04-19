@@ -1,0 +1,2663 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kartini: Dari Gelap Menuju Terang</title>
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0D0908;
+            --bg-secondary: #1A1410;
+            --bg-tertiary: #261E18;
+            --cream: #F5E6D3;
+            --cream-light: #FAF3EB;
+            --brown: #8B6914;
+            --brown-dark: #5C4A1F;
+            --gold: #D4AF37;
+            --gold-light: #E8C547;
+            --gold-dark: #B8960F;
+            --text-primary: #F5E6D3;
+            --text-secondary: #C4A97A;
+            --text-muted: #8B7355;
+            --accent: #D4AF37;
+            --danger: #C44536;
+            --success: #4A7C59;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, .heading {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(26, 20, 16, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .glass-light {
+            background: rgba(245, 230, 211, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        /* Premium Button */
+        .btn-premium {
+            position: relative;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
+            color: var(--bg-primary);
+            font-weight: 600;
+            letter-spacing: 1px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        .btn-premium::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn-premium:hover::before {
+            left: 100%;
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-outline {
+            padding: 14px 36px;
+            background: transparent;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .btn-outline:hover {
+            background: var(--gold);
+            color: var(--bg-primary);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold-dark);
+            border-radius: 3px;
+        }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 2px solid transparent;
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loader::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            border: 2px solid transparent;
+            border-top-color: var(--cream);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite reverse;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(139, 105, 20, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(26, 20, 16, 0.9) 0%, var(--bg-primary) 100%);
+        }
+
+        .hero-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                opacity: 0;
+                transform: translateY(100vh) scale(0);
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) scale(1);
+            }
+        }
+
+        /* Story Sections */
+        .story-section {
+            position: relative;
+            min-height: 100vh;
+            padding: 100px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+        }
+
+        .story-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .story-content {
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .story-title {
+            font-size: clamp(2rem, 5vw, 4rem);
+            color: var(--gold);
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease 0.2s;
+        }
+
+        .story-section.visible .story-title {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .story-text {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            line-height: 2;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .story-section.visible .story-text {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .story-text span {
+            display: inline;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .story-text span.visible {
+            opacity: 1;
+        }
+
+        /* Parallax Background */
+        .parallax-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%;
+            pointer-events: none;
+            transform: translateY(0);
+            transition: transform 0.1s linear;
+        }
+
+        /* Choice Cards */
+        .choice-card {
+            background: rgba(26, 20, 16, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-align: center;
+        }
+
+        .choice-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .choice-card.selected {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        /* Audio Controls */
+        .audio-controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            border-radius: 50px;
+        }
+
+        .audio-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .audio-btn:hover {
+            background: var(--gold);
+            color: var(--bg-primary);
+        }
+
+        .volume-slider {
+            width: 100px;
+            height: 4px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(212, 175, 55, 0.2);
+            border-radius: 2px;
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            background: var(--gold);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 9, 8, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.4s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        /* Input Styles */
+        .input-premium {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(13, 9, 8, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .input-premium:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+        }
+
+        .input-premium::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Navigation */
+        .nav-premium {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-premium.scrolled {
+            background: rgba(13, 9, 8, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 15px 40px;
+        }
+
+        /* Progress Bar Story */
+        .story-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light));
+            z-index: 999;
+            transition: width 0.1s linear;
+        }
+
+        /* Quiz Styles */
+        .quiz-option {
+            padding: 20px 24px;
+            background: rgba(26, 20, 16, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .quiz-option:hover {
+            border-color: rgba(212, 175, 55, 0.5);
+            background: rgba(26, 20, 16, 0.8);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success);
+            background: rgba(74, 124, 89, 0.2);
+        }
+
+        .quiz-option.wrong {
+            border-color: var(--danger);
+            background: rgba(196, 69, 54, 0.2);
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+            color: var(--bg-primary);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Leaderboard */
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background: rgba(26, 20, 16, 0.5);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-item:hover {
+            background: rgba(26, 20, 16, 0.8);
+        }
+
+        .leaderboard-item.top-1 {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .leaderboard-item.top-2 {
+            border-color: #C0C0C0;
+        }
+
+        .leaderboard-item.top-3 {
+            border-color: #CD7F32;
+        }
+
+        .rank-badge {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .rank-1 { background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; }
+        .rank-2 { background: linear-gradient(135deg, #C0C0C0, #A0A0A0); color: #000; }
+        .rank-3 { background: linear-gradient(135deg, #CD7F32, #8B4513); color: #FFF; }
+
+        /* Admin Dashboard */
+        .admin-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-right: 1px solid rgba(212, 175, 55, 0.1);
+            padding: 30px 20px;
+            overflow-y: auto;
+        }
+
+        .admin-content {
+            margin-left: 280px;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .stat-card {
+            background: rgba(26, 20, 16, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            height: 200px;
+            margin-top: 20px;
+        }
+
+        /* Table */
+        .table-premium {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .table-premium th {
+            padding: 16px;
+            text-align: left;
+            background: rgba(212, 175, 55, 0.05);
+            color: var(--gold);
+            font-weight: 500;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .table-premium td {
+            padding: 16px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .table-premium tr:hover td {
+            background: rgba(26, 20, 16, 0.5);
+        }
+
+        /* Scene Backgrounds */
+        .scene-opening {
+            background: 
+                radial-gradient(ellipse at 50% 0%, rgba(26, 20, 16, 0.9) 0%, transparent 70%),
+                radial-gradient(ellipse at 50% 100%, rgba(139, 105, 20, 0.2) 0%, transparent 50%),
+                var(--bg-primary);
+        }
+
+        .scene-childhood {
+            background: 
+                radial-gradient(ellipse at 30% 30%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 70%, rgba(139, 105, 20, 0.08) 0%, transparent 50%),
+                var(--bg-primary);
+        }
+
+        .scene-conflict {
+            background: 
+                radial-gradient(ellipse at 50% 50%, rgba(100, 60, 30, 0.2) 0%, transparent 50%),
+                linear-gradient(180deg, var(--bg-primary) 0%, #1A120D 100%);
+        }
+
+        .scene-struggle {
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 40%),
+                radial-gradient(ellipse at 80% 20%, rgba(139, 105, 20, 0.1) 0%, transparent 40%),
+                var(--bg-primary);
+        }
+
+        .scene-impact {
+            background: 
+                radial-gradient(ellipse at 50% 0%, rgba(212, 175, 55, 0.15) 0%, transparent 60%),
+                var(--bg-primary);
+        }
+
+        .scene-ending {
+            background: 
+                radial-gradient(ellipse at 50% 50%, rgba(212, 175, 55, 0.1) 0%, transparent 70%),
+                linear-gradient(180deg, var(--bg-primary) 0%, #1A1410 50%, #0D0908 100%);
+        }
+
+        /* Decorative Elements */
+        .ornament {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .ornament::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.05);
+            border-radius: 50%;
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        .scroll-indicator .mouse {
+            width: 26px;
+            height: 40px;
+            border: 2px solid rgba(212, 175, 55, 0.4);
+            border-radius: 13px;
+            position: relative;
+        }
+
+        .scroll-indicator .wheel {
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 8px;
+            background: var(--gold);
+            border-radius: 2px;
+            animation: scroll-wheel 2s infinite;
+        }
+
+        @keyframes scroll-wheel {
+            0%, 100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            50% { opacity: 0.3; transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                transform: translateX(-100%);
+                z-index: 1001;
+            }
+
+            .admin-sidebar.open {
+                transform: translateX(0);
+            }
+
+            .admin-content {
+                margin-left: 0;
+            }
+
+            .audio-controls {
+                bottom: 20px;
+                right: 20px;
+              padding: 12px 16px;
+            }
+
+            .volume-slider {
+                display: none;
+            }
+
+            .nav-premium {
+                padding: 15px 20px;
+            }
+        }
+
+        /* Reduce motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Certificate */
+        .certificate {
+            background: linear-gradient(135deg, #FAF3EB 0%, #F5E6D3 100%);
+            border: 3px solid var(--gold);
+            padding: 40px;
+            border-radius: 8px;
+            color: var(--bg-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .certificate::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            border-radius: 4px;
+            pointer-events: none;
+        }
+
+        /* Text reveal animation */
+        .reveal-text {
+            opacity: 0;
+            transform: translateY(20px);
+          transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scene number */
+        .scene-number {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 120px;
+            font-weight: 300;
+            color: rgba(212, 175, 55, 0.05);
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        /* Quote style */
+        .quote {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            color: var(--cream);
+            line-height: 1.6;
+            position: relative;
+            padding: 0 40px;
+        }
+
+        .quote::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: 0;
+            font-size: 80px;
+            color: var(--gold);
+            opacity: 0.3;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+      <div class="loader" style="position: relative;"></div>
+        <p class="mt-6 text-sm tracking-widest uppercase" style="color: var(--text-muted);">Menyiapkan Pengalaman</p>
+    </div>
+
+    <!-- Story Progress Bar -->
+    <div class="story-progress" id="storyProgress" style="width: 0%;"></div>
+
+    <!-- Audio Controls -->
+    <div class="audio-controls glass" id="audioControls">
+        <button class="audio-btn" id="playPauseBtn" onclick="togglePlay()" aria-label="Play/Pause">
+            <svg id="playIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <svg id="pauseIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                <rect x="6" y="4" width="4" height="16"></rect>
+                <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+        </button>
+        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50" onchange="setVolume(this.value)" aria-label="Volume">
+        <button class="audio-btn" id="muteBtn" onclick="toggleMute()" aria-label="Mute">
+            <svg id="volumeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+            </svg>
+            <svg id="muteIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <line x1="23" y1="9" x2="17" y2="15"></line>
+                <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app">
+        <!-- Landing Page -->
+        <div id="landingPage">
+            <!-- Navigation -->
+            <nav class="nav-premium" id="mainNav">
+                <div class="flex items-center gap-3">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <circle cx="16" cy="16" r="14" stroke="var(--gold)" stroke-width="1"/>
+                        <path d="M16 6 L16 26 M6 16 L26 16" stroke="var(--gold)" stroke-width="1" opacity="0.5"/>
+                        <circle cx="16" cy="16" r="6" fill="var(--gold)" opacity="0.2"/>
+                    </svg>
+                    <span class="heading text-lg tracking-wide" style="color: var(--gold);">KARTINI</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="btn-outline text-xs" onclick="showModal('loginModal')">Masuk</button>
+                    <button class="btn-premium text-xs" onclick="showModal('registerModal')">Daftar</button>
+                </div>
+            </nav>
+
+            <!-- Hero Section -->
+            <section class="hero-section" id="heroSection">
+                <div class="hero-bg"></div>
+                <div class="hero-particles" id="particles"></div>
+                
+                <!-- Decorative Ornaments -->
+                <div class="ornament" style="top: -150px; left: -150px; opacity: 0.5;"></div>
+                <div class="ornament" style="bottom: -150px; right: -150px; opacity: 0.3;"></div>
+                
+                <div class="text-center px-6 relative z-10">
+                    <p class="text-xs tracking-[0.3em] uppercase mb-6" style="color: var(--text-muted);">Sebuah Kisah Inspiratif</p>
+                    <h1 class="heading text-5xl md:text-7xl lg:text-8xl font-light mb-4" style="color: var(--cream);">
+                        <span class="font-semibold" style="color: var(--gold);">Kartini</span>
+                    </h1>
+                    <h2 class="heading text-2xl md:text-3xl font-light mb-8" style="color: var(--text-secondary);">
+                        Dari Gelap Menuju Terang
+                    </h2>
+                    <p class="text-sm md:text-base max-w-xl mx-auto mb-12 leading-relaxed" style="color: var(--text-muted);">
+                        Sebuah perjalanan interaktif mengikuti jejak pahlawan emansipasi wanita Indonesia. 
+                        Rasakan perjuangan, pilih jalan, dan temukan warisan yang abadi.
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <button class="btn-premium" onclick="startStory()">
+                            Mulai Perjalanan
+                        </button>
+                        <button class="btn-outline" onclick="showModal('loginModal')">
+                            Lanjutkan Progress
+                        </button>
+                    </div>
+                </div>
+
+                <div class="scroll-indicator">
+                    <div class="mouse">
+                        <div class="wheel"></div>
+                    </div>
+                    <span class="text-xs tracking-widest uppercase" style="color: var(--text-muted);">Gulir untuk mulai</span>
+                </div>
+            </section>
+
+            <!-- Preview Section -->
+            <section class="py-20 px-6" style="background: var(--bg-secondary);">
+                <div class="max-w-6xl mx-auto">
+                  <div class="text-center mb-16">
+                        <p class="text-xs tracking-[0.2em] uppercase mb-4" style="color: var(--gold);">Pengalaman Premium</p>
+                        <h2 class="heading text-3xl md:text-4xl font-light" style="color: var(--cream);">Fitur Interaktif</h2>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="glass-light rounded-xl p-8 text-center">
+                            <div class="w-16 h-16 mx-auto mb-6 rounded-full flex items-center justify-center" style="background: rgba(212, 175, 55, 0.1);">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5">
+                                    <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+                                    <circle cx="12" cy="13" r="3"/>
+                                </svg>
+                            </div>
+                            <h3 class="heading text-xl mb-3" style="color: var(--cream);">Cinematic Story</h3>
+                            <p class="text-sm leading-relaxed" style="color: var(--text-muted);">Pengalaman storytelling seperti film dengan animasi scroll dan efek visual memukau</p>
+                        </div>
+                        <div class="glass-light rounded-xl p-8 text-center">
+                            <div class="w-16 h-16 mx-auto mb-6 rounded-full flex items-center justify-center" style="background: rgba(212, 175, 55, 0.1);">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                    <path d="M2 17l10 5 10-5"/>
+                                    <path d="M2 12l10 5 10-5"/>
+                                </svg>
+                            </div>
+                            <h3 class="heading text-xl mb-3" style="color: var(--cream);">Pilih Jalanmu</h3>
+                            <p class="text-sm leading-relaxed" style="color: var(--text-muted);">Keputusan di tanganmu. Setiap pilihan membentuk pemahaman tentang perjuangan Kartini</p>
+                        </div>
+                        <div class="glass-light rounded-xl p-8 text-center">
+                            <div class="w-16 h-16 mx-auto mb-6 rounded-full flex items-center justify-center" style="background: rgba(212, 175, 55, 0.1);">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5">
+                                    <path d="M12 20V10"/>
+                                    <path d="M18 20V4"/>
+                                    <path d="M6 20v-4"/>
+                                </svg>
+                            </div>
+                            <h3 class="heading text-xl mb-3" style="color: var(--cream);">Quiz & Ranking</h3>
+                            <p class="text-sm leading-relaxed" style="color: var(--text-muted);">Uji pemahaman dan bersaing dengan peserta lain di papan peringkat kelas</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Preview -->
+            <section class="py-20 px-6" style="background: var(--bg-primary);">
+                <div class="max-w-4xl mx-auto text-center">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                        <div>
+                          <p class="heading text-4xl md:text-5xl font-semibold" style="color: var(--gold);" id="statScenes">6</p>
+                            <p class="text-sm mt-2" style="color: var(--text-muted);">Adegan Cerita</p>
+                        </div>
+                        <div>
+                            <p class="heading text-4xl md:text-5xl font-semibold" style="color: var(--gold);" id="statQuestions">10</p>
+                            <p class="text-sm mt-2" style="color: var(--text-muted);">Soal Quiz</p>
+                        </div>
+                        <div>
+                            <p class="heading text-4xl md:text-5xl font-semibold" style="color: var(--gold);" id="statUsers">0</p>
+                            <p class="text-sm mt-2" style="color: var(--text-muted);">Peserta</p>
+                        </div>
+                        <div>
+                            <p class="heading text-4xl md:text-5xl font-semibold" style="color: var(--gold);">5+</p>
+                            <p class="text-sm mt-2" style="color: var(--text-muted);">Menit Cerita</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="py-12 px-6 text-center" style="background: var(--bg-secondary); border-top: 1px solid rgba(212, 175, 55, 0.1);">
+                <p class="text-sm" style="color: var(--text-muted);">Hari Kartini 2025 - Sebuah Penghormatan untuk Pahlawan Emansipasi</p>
+                <button class="text-xs mt-4 underline" style="color: var(--gold);" onclick="showModal('adminLoginModal')">Admin Login</button>
+            </footer>
+        </div>
+
+        <!-- Story Page -->
+        <div id="storyPage" style="display: none;">
+            <!-- Story Navigation -->
+            <nav class="nav-premium" id="storyNav">
+                <div class="flex items-center gap-3">
+                    <button onclick="exitStory()" class="audio-btn" aria-label="Kembali">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <span class="heading text-lg" style="color: var(--gold);">Scene <span id="currentScene">1</span>/6</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="text-xs" style="color: var(--text-muted);" id="userName">Guest</span>
+                </div>
+            </nav>
+
+            <!-- Story Scenes Container -->
+            <div id="storyContainer">
+                <!-- Scene 1: Opening -->
+              <section class="story-section scene-opening" id="scene1">
+                    <span class="scene-number">01</span>
+                    <div class="parallax-bg" id="parallax1"></div>
+                    <div class="story-content">
+                        <p class="text-xs tracking-[0.3em] uppercase mb-4" style="color: var(--gold);">Prolog</p>
+                        <h2 class="story-title">Kelahiran Sebuah Cahaya</h2>
+                        <div class="story-text" id="scene1Text">
+                            <p class="mb-6">Tahun 1879, di sebuah sudut Jepara, seorang bayi perempuan lahir dari rahim seorang bangsawan Jawa.</p>
+                            <p class="mb-6">Ayahnya, R.M. Sosroningrat, adalah bupati pertama Jepara. Ibundanya, M.A. Ngasirah, adalah putri dari seorang kyai religius.</p>
+                            <p class="mb-6">Tak ada yang menyangka, bayi yang diberi nama <strong style="color: var(--gold);">Raden Adjeng Kartini</strong> ini akan menjadi pelita bagi wanita Nusantara.</p>
+                            <p class="quote mt-8">"Aku mau menunjukkan pada dunia, bahwa wanita itu bukan sekadar perhiasan."</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Scene 2: Childhood -->
+                <section class="story-section scene-childhood" id="scene2">
+                    <span class="scene-number">02</span>
+                    <div class="parallax-bg" id="parallax2"></div>
+                    <div class="story-content">
+                        <p class="text-xs tracking-[0.3em] uppercase mb-4" style="color: var(--gold);">Masa Kecil</p>
+                        <h2 class="story-title">Mimpi di Balik Tembok Istana</h2>
+                        <div class="story-text" id="scene2Text">
+                            <p class="mb-6">Kartini kecil tumbuh dalam lingkungan istana yang penuh adat istiadat. Namun berbeda dengan kebanyakan bangsawan, ia diperbolehkan bersekolah di ELS (Europese Lagere School).</p>
+                            <p class="mb-6">Di sekolah Belanda ini, mata Kartini terbuka pada dunia yang lebih luas. Ia belajar membaca, menulis, dan berpikir bebas.</p>
+                            <p class="mb-6">Namun segalanya berubah saat usianya menginjak 12 tahun. Tradisi pingitan memanggil namanya.</p>
+                            <p class="mb-6">Sebuah tradisi yang memaksa gadis bangsawan terkurung di rumah, menunggu waktu untuk dinikahkan.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Scene 3: Pingitan (Conflict) -->
+                <section class="story-section scene-conflict" id="scene3">
+                    <span class="scene-number">03</span>
+                    <div class="parallax-bg" id="parallax3"></div>
+                    <div class="story-content">
+                        <p class="text-xs tracking-[0.3em] uppercase mb-4" style="color: var(--gold);">Konflik</p>
+                        <h2 class="story-title">Malam Terpanjang</h2>
+                        <div class="story-text" id="scene3Text">
+                            <p class="mb-6">Di balik tembok tinggi istana, Kartini menjalani hari-harinya dalam pingitan. Dunianya terbatas pada kamar dan halaman dalam.</p>
+                            <p class="mb-6">Setiap malam, ia menatap langit melalui jendela kecil. Bulan dan bintang menjadi satu-satunya teman bicaranya.</p>
+                            <p class="mb-6">"Mengapa wanita harus terkurung?" pertanyaan itu bergema di setiap malam sunyi.</p>
+                            <p class="mb-6">Tapi kegelapan ini justru menjadi bungkamnya cahaya. Dalam kesunyian, Kartini menemukan senjatanya: <strong style="color: var(--gold);">pena dan kertas</strong>.</p>
+                        </div>
+                        
+                        <!-- Interactive Choice -->
+                      <div class="mt-12" id="choice1" style="display: none;">
+                            <p class="text-sm mb-6" style="color: var(--cream);">Kartini memutuskan untuk...</p>
+                            <div class="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+                                <div class="choice-card" onclick="makeChoice(1, 'a')">
+                                    <svg class="mx-auto mb-4" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5">
+                                        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+                                    </svg>
+                                    <p class="font-medium mb-2" style="color: var(--cream);">Menulis Surat</p>
+                                    <p class="text-xs" style="color: var(--text-muted);">Menyalurkan pikiran melalui surat kepada teman-temannya di Belanda</p>
+                                </div>
+                                <div class="choice-card" onclick="makeChoice(1, 'b')">
+                                    <svg class="mx-auto mb-4" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5">
+                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                                    </svg>
+                                    <p class="font-medium mb-2" style="color: var(--cream);">Belajar Mandiri</p>
+                                    <p class="text-xs" style="color: var(--text-muted);">Membaca buku-buku dan belajar sendiri di dalam rumah</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Scene 4: Struggle -->
+                <section class="story-section scene-struggle" id="scene4">
+                    <span class="scene-number">04</span>
+                    <div class="parallax-bg" id="parallax4"></div>
+                    <div class="story-content">
+                        <p class="text-xs tracking-[0.3em] uppercase mb-4" style="color: var(--gold);">Perjuangan</p>
+                        <h2 class="story-title">Surat-Surat dari Jepara</h2>
+                        <div class="story-text" id="scene4Text">
+                            <p class="mb-6">Melalui surat-suratnya, Kartini menghubungi banyak teman di Belanda. Salah satunya adalah Rosa Abendanon, yang kemudian menjadi sahabat penanya.</p>
+                            <p class="mb-6">Dalam setiap surat, Kartini menuangkan pikirannya tentang nasib wanita Jawa, pendidikan, dan cita-citanya untuk memajukan kaumnya.</p>
+                            <p class="mb-6"><strong style="color: var(--gold);">"Habis gelap terbitlah terang"</strong> - semboyan yang kemudian menjadi judul kumpulan suratnya.</p>
+                            <p class="mb-6">Surat-surat ini bukan sekadar curhatan. Ini adalah seruan perjuangan, sebuah manifesto emansipasi yang ditulis tangan oleh seorang gadis Jawa yang terkurung.</p>
+                        </div>
+
+                        <!-- Second Choice -->
+                        <div class="mt-12" id="choice2" style="display: none;">
+                            <p class="text-sm mb-6" style="color: var(--cream);">Kartini bermimpi mendirikan...</p>
+                            <div class="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+                                <div class="choice-card" onclick="makeChoice(2, 'a')">
+                                    <svg class="mx-auto mb-4" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5">
+                                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                                        <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
+                                    </svg>
+                                    <p class="font-medium mb-2" style="color: var(--cream);">Sekolah untuk Wanita</p>
+                                    <p class="text-xs" style="color: var(--text-muted);">Memberikan pendidikan formal bagi kaum wanita pribumi</p>
+                                </div>
+                                <div class="choice-card" onclick="makeChoice(2, 'b')">
+                                    <svg class="mx-auto mb-4" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5">
+                                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                                    </svg>
+                                    <p class="font-medium mb-2" style="color: var(--cream);">Rumah Batik</p>
+                                    <p class="text-xs" style="color: var(--text-muted);">Memberdayakan wanita melalui keterampilan ekonomi</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Scene 5: Impact -->
+                <section class="story-section scene-impact" id="scene5">
+                    <span class="scene-number">05</span>
+                    <div class="parallax-bg" id="parallax5"></div>
+                    <div class="story-content">
+                        <p class="text-xs tracking-[0.3em] uppercase mb-4" style="color: var(--gold);">Warisan</p>
+                        <h2 class="story-title">Cahaya yang Tak Pernah Padam</h2>
+                        <div class="story-text" id="scene5Text">
+                            <p class="mb-6">Tahun 1903, Kartini menikah dengan R.M. Joyodiningrat, bupati Rembang. Meski awalnya ia menolak, pernikahan ini justru membuka pintu baru.</p>
+                            <p class="mb-6">Dukungan suaminya memungkinkan Kartini mewujudkan mimpinya mendirikan sekolah untuk wanita di Rembang.</p>
+                            <p class="mb-6">Namun takdir berkata lain. Pada 17 September 1904, empat hari setelah melahirkan putra pertamanya, Kartini meninggal dunia.</p>
+                            <p class="mb-6">Ia pergi terlalu cepat, tapi warisannya abadi. Surat-suratnya diterbitkan dengan judul <strong style="color: var(--gold);">"Door Duisternis tot Licht"</strong> (Habis Gelap Terbit Terang).</p>
+                            <p class="mb-6">Buku ini menginspirasi ribuan, memantik semangat emansipasi di seluruh Nusantara.</p>
+                        </div>
+                    </div>
+                </section>
+
+              <!-- Scene 6: Ending -->
+                <section class="story-section scene-ending" id="scene6">
+                    <span class="scene-number">06</span>
+                    <div class="parallax-bg" id="parallax6"></div>
+                    <div class="story-content">
+                        <p class="text-xs tracking-[0.3em] uppercase mb-4" style="color: var(--gold);">Epilog</p>
+                        <h2 class="story-title">Untuk Setiap Kartini Baru</h2>
+                        <div class="story-text" id="scene6Text">
+                            <p class="mb-6">Seratus dua puluh tahun setelah wafatnya, nama Kartini tetap hidup. Setiap tanggal 21 April, Indonesia memperingati Hari Kartini.</p>
+                            <p class="mb-6">Bukan sekadar mengenang sosok, tapi mengenang semangatnya: semangat untuk terus belajar, berkarya, dan memperjuangkan keadilan.</p>
+                            <p class="mb-6">Di setiap sudut negeri, wanita-wanita Indonesia terus berkibar. Menjadi dokter, ilmuwan, pemimpin, seniman - semua berawal dari mimpi seorang gadis dari Jepara.</p>
+                            <p class="quote mt-8 mb-8">"Setiap wanita adalah Kartini. Setiap mimpi adalah cahaya."</p>
+                        </div>
+                        
+                        <div class="mt-12" id="storyEnd" style="display: none;">
+                            <button class="btn-premium" onclick="startQuiz()">
+                                Lanjut ke Quiz
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Quiz Page -->
+        <div id="quizPage" style="display: none; min-height: 100vh; padding: 100px 20px;">
+            <div class="max-w-3xl mx-auto">
+                <div class="text-center mb-12">
+                    <p class="text-xs tracking-[0.3em] uppercase mb-4" style="color: var(--gold);">Uji Pemahaman</p>
+                    <h2 class="heading text-3xl md:text-4xl" style="color: var(--cream);">Quiz: Mengenal Kartini</h2>
+                    <p class="text-sm mt-4" style="color: var(--text-muted);">Jawab pertanyaan berdasarkan cerita yang telah kamu baca</p>
+                </div>
+
+                <!-- Quiz Progress -->
+                <div class="glass rounded-xl p-6 mb-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm" style="color: var(--text-muted);">Pertanyaan <span id="currentQuestion">1</span> dari <span id="totalQuestions">10</span></span>
+                        <span class="text-sm" style="color: var(--gold);" id="quizTimer">10:00</span>
+                    </div>
+                    <div class="h-2 rounded-full" style="background: rgba(212, 175, 55, 0.1);">
+                        <div class="h-full rounded-full transition-all duration-300" style="background: var(--gold); width: 10%;" id="quizProgress"></div>
+                    </div>
+                </div>
+
+                <!-- Question Container -->
+                <div class="glass rounded-xl p-8 mb-8" id="questionContainer">
+                    <p class="text-lg mb-8" style="color: var(--cream);" id="questionText">Loading...</p>
+                    <div class="space-y-4" id="optionsContainer"></div>
+                </div>
+
+              <!-- Navigation -->
+                <div class="flex justify-between">
+                    <button class="btn-outline" onclick="prevQuestion()" id="prevBtn" disabled>
+                        Sebelumnya
+                    </button>
+                    <button class="btn-premium" onclick="nextQuestion()" id="nextBtn">
+                        Selanjutnya
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Page -->
+        <div id="resultPage" style="display: none; min-height: 100vh; padding: 100px 20px;">
+            <div class="max-w-2xl mx-auto text-center">
+                <div class="glass rounded-2xl p-12">
+                    <svg class="mx-auto mb-6" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1">
+                        <path d="M12 15l-2 5l9-11h-6l2-5l-9 11h6z"/>
+                    </svg>
+                    <h2 class="heading text-3xl mb-4" style="color: var(--cream);">Quiz Selesai!</h2>
+                    <p class="mb-8" style="color: var(--text-muted);">Jawabanmu sedang dikumpulkan dan akan dinilai oleh admin. Hasil akan diumumkan setelah proses penilaian selesai.</p>
+                    
+                    <div class="glass-light rounded-xl p-6 mb-8">
+                        <p class="text-sm mb-2" style="color: var(--text-muted);">Status</p>
+                        <p class="text-xl font-semibold" style="color: var(--gold);">Menunggu Penilaian</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <button class="btn-outline" onclick="goToLeaderboard()">
+                            Lihat Ranking
+                        </button>
+                        <button class="btn-premium" onclick="exitToHome()">
+                            Kembali ke Beranda
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Page -->
+        <div id="leaderboardPage" style="display: none; min-height: 100vh; padding: 100px 20px;">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <p class="text-xs tracking-[0.3em] uppercase mb-4" style="color: var(--gold);">Kompetisi</p>
+                    <h2 class="heading text-3xl md:text-4xl" style="color: var(--cream);">Papan Peringkat</h2>
+                </div>
+
+                <!-- Top 3 -->
+              <div class="grid md:grid-cols-3 gap-4 mb-8" id="topThree"></div>
+
+                <!-- Rest of Leaderboard -->
+                <div class="glass rounded-xl p-6">
+                    <div class="space-y-3" id="leaderboardList"></div>
+                </div>
+
+                <div class="text-center mt-8">
+                    <button class="btn-outline" onclick="exitToHome()">
+                        Kembali ke Beranda
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="adminDashboard" style="display: none;">
+            <!-- Admin Sidebar -->
+            <aside class="admin-sidebar" id="adminSidebar">
+                <div class="flex items-center gap-3 mb-10">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <circle cx="16" cy="16" r="14" stroke="var(--gold)" stroke-width="1"/>
+                        <circle cx="16" cy="16" r="6" fill="var(--gold)" opacity="0.3"/>
+                    </svg>
+                    <div>
+                        <p class="font-semibold" style="color: var(--gold);">Admin Panel</p>
+                        <p class="text-xs" style="color: var(--text-muted);">Kartini Project</p>
+                    </div>
+                </div>
+
+                <nav class="space-y-2">
+                    <button class="w-full text-left px-4 py-3 rounded-lg transition-all" style="background: rgba(212, 175, 55, 0.1); color: var(--gold);" onclick="showAdminTab('dashboard')">
+                        Dashboard
+                    </button>
+                    <button class="w-full text-left px-4 py-3 rounded-lg transition-all hover:bg-opacity-50" style="color: var(--text-muted);" onclick="showAdminTab('users')">
+                        Users
+                    </button>
+                    <button class="w-full text-left px-4 py-3 rounded-lg transition-all hover:bg-opacity-50" style="color: var(--text-muted);" onclick="showAdminTab('questions')">
+                        Soal Quiz
+                    </button>
+                    <button class="w-full text-left px-4 py-3 rounded-lg transition-all hover:bg-opacity-50" style="color: var(--text-muted);" onclick="showAdminTab('answers')">
+                        Jawaban User
+                    </button>
+                    <button class="w-full text-left px-4 py-3 rounded-lg transition-all hover:bg-opacity-50" style="color: var(--text-muted);" onclick="showAdminTab('ranking')">
+                        Ranking
+                    </button>
+                </nav>
+
+                <div class="mt-auto pt-10">
+                  <button class="w-full btn-outline text-xs" onclick="adminLogout()">
+                        Logout
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Admin Content -->
+            <main class="admin-content">
+                <!-- Dashboard Tab -->
+                <div id="adminDashboardTab">
+                    <h2 class="heading text-2xl mb-8" style="color: var(--cream);">Dashboard Overview</h2>
+                    
+                    <!-- Stats Grid -->
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                        <div class="stat-card">
+                            <p class="text-sm" style="color: var(--text-muted);">Total Users</p>
+                            <p class="heading text-3xl" style="color: var(--gold);" id="adminStatUsers">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <p class="text-sm" style="color: var(--text-muted);">Quiz Selesai</p>
+                            <p class="heading text-3xl" style="color: var(--gold);" id="adminStatCompleted">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <p class="text-sm" style="color: var(--text-muted);">Rata-rata Nilai</p>
+                            <p class="heading text-3xl" style="color: var(--gold);" id="adminStatAverage">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <p class="text-sm" style="color: var(--text-muted);">Pending</p>
+                            <p class="heading text-3xl" style="color: var(--gold);" id="adminStatPending">0</p>
+                        </div>
+                    </div>
+
+                    <!-- Charts -->
+                    <div class="grid lg:grid-cols-2 gap-6">
+                        <div class="stat-card">
+                            <h3 class="font-medium mb-4" style="color: var(--cream);">Distribusi Nilai</h3>
+                            <canvas id="scoreChart" height="200"></canvas>
+                        </div>
+                        <div class="stat-card">
+                            <h3 class="font-medium mb-4" style="color: var(--cream);">Pertanyaan Paling Salah</h3>
+                            <div id="hardestQuestions" class="space-y-3"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Tab -->
+              <div id="adminUsersTab" style="display: none;">
+                    <div class="flex items-center justify-between mb-8">
+                        <h2 class="heading text-2xl" style="color: var(--cream);">Manajemen Users</h2>
+                        <button class="btn-premium text-xs" onclick="showModal('addUserModal')">Tambah User</button>
+                    </div>
+                    <div class="glass rounded-xl overflow-hidden">
+                        <table class="table-premium">
+                            <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>Kelas</th>
+                                    <th>Sekolah</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Questions Tab -->
+                <div id="adminQuestionsTab" style="display: none;">
+                    <div class="flex items-center justify-between mb-8">
+                        <h2 class="heading text-2xl" style="color: var(--cream);">Bank Soal</h2>
+                        <button class="btn-premium text-xs" onclick="showModal('addQuestionModal')">Tambah Soal</button>
+                    </div>
+                    <div class="space-y-4" id="questionsListAdmin"></div>
+                </div>
+
+                <!-- Answers Tab -->
+                <div id="adminAnswersTab" style="display: none;">
+                    <h2 class="heading text-2xl mb-8" style="color: var(--cream);">Jawaban User</h2>
+                    <div class="space-y-4" id="answersListAdmin"></div>
+                </div>
+
+                <!-- Ranking Tab -->
+                <div id="adminRankingTab" style="display: none;">
+                    <h2 class="heading text-2xl mb-8" style="color: var(--cream);">Ranking & Nilai</h2>
+                    <div class="glass rounded-xl overflow-hidden">
+                        <table class="table-premium">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Nama</th>
+                                    <th>Kelas</th>
+                                    <th>Nilai</th>
+                                    <th>Waktu</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rankingTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-content">
+            <div class="flex items-center justify-between mb-8">
+                <h3 class="heading text-2xl" style="color: var(--cream);">Masuk</h3>
+                <button onclick="hideModal('loginModal')" class="text-2xl" style="color: var(--text-muted);">&times;</button>
+            </div>
+            <form onsubmit="handleLogin(event)">
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-sm mb-2 block" style="color: var(--text-muted);">Email</label>
+                        <input type="email" class="input-premium" id="loginEmail" required placeholder="email@example.com">
+                    </div>
+                    <div>
+                        <label class="text-sm mb-2 block" style="color: var(--text-muted);">Password</label>
+                        <input type="password" class="input-premium" id="loginPassword" required placeholder="Minimal 6 karakter">
+                    </div>
+                </div>
+                <button type="submit" class="btn-premium w-full mt-8">Masuk</button>
+            </form>
+            <p class="text-center text-sm mt-6" style="color: var(--text-muted);">
+                Belum punya akun? <button class="underline" style="color: var(--gold);" onclick="switchModal('loginModal', 'registerModal')">Daftar</button>
+            </p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal-overlay" id="registerModal">
+        <div class="modal-content" style="max-width: 550px;">
+            <div class="flex items-center justify-between mb-8">
+                <h3 class="heading text-2xl" style="color: var(--cream);">Daftar Akun</h3>
+                <button onclick="hideModal('registerModal')" class="text-2xl" style="color: var(--text-muted);">&times;</button>
+            </div>
+            <form onsubmit="handleRegister(event)">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label class="text-sm mb-2 block" style="color: var(--text-muted);">Nama Lengkap</label>
+                        <input type="text" class="input-premium" id="regName" required placeholder="Nama lengkap">
+                    </div>
+                    <div>
+                        <label class="text-sm mb-2 block" style="color: var(--text-muted);">Kelas</label>
+                        <select class="input-premium" id="regClass" required>
+                                 <option value="">Pilih Kelas</option>
+                                    <option value="X.1">X.1</option>
+                                    <option value="X.2">X.2</option>
+                                    <option value="X.3">X.3</option>
+                                    <option value="X.4">X.4</option>
+                                    <option value="X.5">X.5</option>
+                                    <option value="XI.1">XI.1</option>
+                                    <option value="XI.2">XI.2</option>
+                                    <option value="XI.3">XI.3</option>
+                                    <option value="XI.4">XI.4</option>
+                                    <option value="XI.5">XI.5</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="text-sm mb-2 block" style="color: var(--text-muted);">Sekolah</label>
+                        <input type="text" class="input-premium" id="regSchool" required placeholder="Nama sekolah">
+                    </div>
+                    <div>
+                        <label class="text-sm mb-2 block" style="color: var(--text-muted);">Email</label>
+                        <input type="email" class="input-premium" id="regEmail" required placeholder="email@example.com">
+                    </div>
+                    <div>
+                        <label class="text-sm mb-2 block" style="color: var(--text-muted);">No HP</label>
+                        <input type="tel" class="input-premium" id="regPhone" required placeholder="08xxxxxxxxxx">
+                    </div>
+                    <div>
+                        <label class="text-sm mb-2 block" style="color: var(--text-muted);">Password</label>
+                        <input type="password" class="input-premium" id="regPassword" required placeholder="Minimal 6 karakter" minlength="6">
+                    </div>
+                    <div>
+                        <label class="text-sm mb-2 block" style="color: var(--text-muted);">Konfirmasi Password</label>
+                        <input type="password" class="input-premium" id="regConfirmPassword" required placeholder="Ulangi password">
+                    </div>
+                </div>
+                <button type="submit" class="btn-premium w-full mt-8">Daftar</button>
+            </form>
+            <p class="text-center text-sm mt-6" style="color: var(--text-muted);">
+                Sudah punya akun? <button class="underline" style="color: var(--gold);" onclick="switchModal('registerModal', 'loginModal')">Masuk</button>
+            </p>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div class="modal-overlay" id="adminLoginModal">
+        <div class="modal-content">
+          <div class="flex items-center justify-between mb-8">
+                <h3 class="heading text-2xl" style="color: var(--cream);">Admin Login</h3>
+                <button onclick="hideModal('adminLoginModal')" class="text-2xl" style="color: var(--text-muted);">&times;</button>
+            </div>
+            <form onsubmit="handleAdminLogin(event)">
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-sm mb-2 block" style="color: var(--text-muted);">Email</label>
+                        <input type="email" class="input-premium" id="adminEmail" required placeholder="admin@email.com">
+                    </div>
+                    <div>
+                        <label class="text-sm mb-2 block" style="color: var(--text-muted);">Password</label>
+                        <input type="password" class="input-premium" id="adminPassword" required placeholder="Password admin">
+                    </div>
+                </div>
+                <button type="submit" class="btn-premium w-full mt-8">Masuk Admin</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Question Modal -->
+    <div class="modal-overlay" id="addQuestionModal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="flex items-center justify-between mb-8">
+                <h3 class="heading text-2xl" style="color: var(--cream);">Tambah Soal</h3>
+                <button onclick="hideModal('addQuestionModal')" class="text-2xl" style="color: var(--text-muted);">&times;</button>
+            </div>
+            <form onsubmit="handleAddQuestion(event)">
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-sm mb-2 block" style="color: var(--text-muted);">Pertanyaan</label>
+                        <textarea class="input-premium" id="questionInput" required rows="3" placeholder="Tulis pertanyaan..."></textarea>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-sm mb-2 block" style="color: var(--text-muted);">Opsi A</label>
+                            <input type="text" class="input-premium" id="optA" required placeholder="Jawaban A">
+                        </div>
+                        <div>
+                            <label class="text-sm mb-2 block" style="color: var(--text-muted);">Opsi B</label>
+                            <input type="text" class="input-premium" id="optB" required placeholder="Jawaban B">
+                        </div>
+                        <div>
+                            <label class="text-sm mb-2 block" style="color: var(--text-muted);">Opsi C</label>
+                            <input type="text" class="input-premium" id="optC" required placeholder="Jawaban C">
+                        </div>
+                        <div>
+                          <label class="text-sm mb-2 block" style="color: var(--text-muted);">Opsi D</label>
+                            <input type="text" class="input-premium" id="optD" required placeholder="Jawaban D">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-sm mb-2 block" style="color: var(--text-muted);">Jawaban Benar</label>
+                        <select class="input-premium" id="correctAnswer" required>
+                            <option value="">Pilih jawaban benar</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn-premium w-full mt-8">Simpan Soal</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Score Modal -->
+    <div class="modal-overlay" id="editScoreModal">
+        <div class="modal-content">
+            <div class="flex items-center justify-between mb-8">
+                <h3 class="heading text-2xl" style="color: var(--cream);">Edit Nilai</h3>
+                <button onclick="hideModal('editScoreModal')" class="text-2xl" style="color: var(--text-muted);">&times;</button>
+            </div>
+            <form onsubmit="handleEditScore(event)">
+                <input type="hidden" id="editScoreUserId">
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-sm mb-2 block" style="color: var(--text-muted);">Nilai</label>
+                        <input type="number" class="input-premium" id="editScoreValue" min="0" max="100" required>
+                    </div>
+                    <div>
+                        <label class="text-sm mb-2 block" style="color: var(--text-muted);">Status</label>
+                        <select class="input-premium" id="editScoreStatus">
+                            <option value="pending">Pending</option>
+                            <option value="published">Published</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn-premium w-full mt-8">Simpan</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+  <div id="toast" class="fixed top-6 right-6 z-[9999] transform translate-x-full transition-transform duration-300">
+        <div class="glass rounded-lg px-6 py-4 flex items-center gap-3">
+            <svg id="toastIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <span id="toastMessage" style="color: var(--cream);">Success!</span>
+        </div>
+    </div>
+
+    <!-- Hidden Audio Elements -->
+    <audio id="bgMusic1" loop preload="auto">
+        <source src="https://assets.mixkit.co/music/preview/mixkit-serene-view-443.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="bgMusic2" loop preload="auto">
+        <source src="https://assets.mixkit.co/music/preview/mixkit-deep-dark-542.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="bgMusic3" loop preload="auto">
+        <source src="https://assets.mixkit.co/music/preview/mixkit-epic-orchestra-transition-2290.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // ==================== DATA INITIALIZATION ====================
+        const ADMIN_CREDENTIALS = {
+            email: 'ossmanjuh@gmail.com',
+            password: 'harikartini26'
+        };
+
+        // Default Questions
+        const DEFAULT_QUESTIONS = [
+            {
+                id: 1,
+                question: "Di mana dan kapan R.A. Kartini dilahirkan?",
+                options: ["Jepara, 1879", "Rembang, 1880", "Semarang, 1878", "Surabaya, 1881"],
+                correct: "A"
+            },
+            {
+                id: 2,
+                question: "Apa nama ayah dari R.A. Kartini?",
+                options: ["R.M. Joyodiningrat", "R.M. Sosroningrat", "R.A. Sosroningrat", "R.M. Tirtonegoro"],
+                correct: "B"
+            },
+            {
+                id: 3,
+                question: "Pada usia berapa Kartini menjalani tradisi pingitan?",
+                options: ["10 tahun", "12 tahun", "14 tahun", "16 tahun"],
+                correct: "B"
+            },
+            {
+              id: 4,
+                question: "Apa yang menjadi 'senjata' Kartini saat dalam pingitan?",
+                options: ["Pena dan kertas", "Buku-buku", "Uang", "Perhiasan"],
+                correct: "A"
+            },
+            {
+                id: 5,
+                question: "Siapa sahabat pena Kartini dari Belanda?",
+                options: ["Rosa Abendanon", "Marie Abendanon", "Estella", "Abendanon"],
+                correct: "A"
+            },
+            {
+                id: 6,
+                question: "Apa judul buku kumpulan surat Kartini dalam bahasa Belanda?",
+                options: ["Habis Gelap Terbit Terang", "Door Duisternis tot Licht", "Letters from Java", "Kartini's Letters"],
+                correct: "B"
+            },
+            {
+                id: 7,
+                question: "Dengan siapa Kartini menikah?",
+                options: ["R.M. Sosroningrat", "R.M. Joyodiningrat", "R.A. Tirtonegoro", "R.M. Panji Sosrokartono"],
+                correct: "B"
+            },
+            {
+                id: 8,
+                question: "Kapan Kartini meninggal dunia?",
+                options: ["17 September 1904", "21 April 1904", "17 September 1905", "21 April 1879"],
+                correct: "A"
+            },
+            {
+                id: 9,
+                question: "Apa yang menjadi impian utama Kartini untuk wanita?",
+                options: ["Menjadi bangsawan", "Mendapatkan pendidikan", "Menikah dengan orang kaya", "Pindah ke Belanda"],
+                correct: "B"
+            },
+            {
+                id: 10,
+                question: "Apa makna dari semboyan 'Habis gelap terbitlah terang'?",
+                options: ["Matahari terbit pagi", "Kegelapan malam", "Dari keterbelakangan menuju kemajuan", "Lampu menyala"],
+                correct: "C"
+            }
+        ];
+
+        // ==================== STATE MANAGEMENT ====================
+        let currentUser = null;
+        let isAdmin = false;
+        let currentScene = 0;
+        let storyChoices = {};
+        let quizAnswers = {};
+        let currentQuestionIndex = 0;
+      let quizStartTime = null;
+        let quizTimerInterval = null;
+
+        // ==================== LOCAL STORAGE FUNCTIONS ====================
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('kartini_users') || '[]');
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem('kartini_users', JSON.stringify(users));
+        }
+
+        function getQuestions() {
+            return JSON.parse(localStorage.getItem('kartini_questions') || JSON.stringify(DEFAULT_QUESTIONS));
+        }
+
+        function saveQuestions(questions) {
+            localStorage.setItem('kartini_questions', JSON.stringify(questions));
+        }
+
+        function getAnswers() {
+            return JSON.parse(localStorage.getItem('kartini_answers') || '[]');
+        }
+
+        function saveAnswers(answers) {
+            localStorage.setItem('kartini_answers', JSON.stringify(answers));
+        }
+
+        // ==================== INITIALIZE DEFAULT DATA ====================
+        function initializeData() {
+            if (!localStorage.getItem('kartini_questions')) {
+                saveQuestions(DEFAULT_QUESTIONS);
+            }
+        }
+
+        // ==================== UI FUNCTIONS ====================
+        function showModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+
+        function hideModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        function switchModal(from, to) {
+            hideModal(from);
+            setTimeout(() => showModal(to), 200);
+      }
+
+      function showToast(message, isSuccess = true) {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            const msg = document.getElementById('toastMessage');
+            
+            msg.textContent = message;
+            icon.style.stroke = isSuccess ? 'var(--success)' : 'var(--danger)';
+            
+            toast.style.transform = 'translateX(0)';
+            setTimeout(() => {
+                toast.style.transform = 'translateX(150%)';
+            }, 3000);
+        }
+
+        function showPage(pageId) {
+            const pages = ['landingPage', 'storyPage', 'quizPage', 'resultPage', 'leaderboardPage', 'adminDashboard'];
+            pages.forEach(page => {
+                document.getElementById(page).style.display = 'none';
+            });
+            document.getElementById(pageId).style.display = 'block';
+        }
+
+        // ==================== AUDIO FUNCTIONS ====================
+        let currentAudio = null;
+        let isPlaying = false;
+        let isMuted = false;
+
+        function initAudio() {
+            currentAudio = document.getElementById('bgMusic1');
+            currentAudio.volume = 0.5;
+        }
+
+        function togglePlay() {
+            if (!currentAudio) return;
+            
+            if (isPlaying) {
+                currentAudio.pause();
+            } else {
+                currentAudio.play().catch(e => console.log('Audio autoplay blocked'));
+            }
+            isPlaying = !isPlaying;
+            updateAudioUI();
+        }
+
+        function setVolume(value) {
+            if (!currentAudio) return;
+            currentAudio.volume = value / 100;
+        }
+
+        function toggleMute() {
+          if (!currentAudio) return;
+            isMuted = !isMuted;
+            currentAudio.muted = isMuted;
+            updateAudioUI();
+        }
+
+        function updateAudioUI() {
+            document.getElementById('playIcon').style.display = isPlaying ? 'none' : 'block';
+            document.getElementById('pauseIcon').style.display = isPlaying ? 'block' : 'none';
+            document.getElementById('volumeIcon').style.display = isMuted ? 'none' : 'block';
+            document.getElementById('muteIcon').style.display = isMuted ? 'block' : 'none';
+        }
+
+        function switchAudio(sceneNum) {
+            const audioFiles = {
+                1: 'bgMusic1',
+                2: 'bgMusic1',
+                3: 'bgMusic2',
+                4: 'bgMusic2',
+                5: 'bgMusic3',
+                6: 'bgMusic3'
+            };
+            
+            const newAudioId = audioFiles[sceneNum] || 'bgMusic1';
+            const newAudio = document.getElementById(newAudioId);
+            
+            if (newAudio && newAudio !== currentAudio) {
+                if (currentAudio && isPlaying) {
+                    currentAudio.pause();
+                    currentAudio.currentTime = 0;
+                }
+                currentAudio = newAudio;
+                currentAudio.volume = document.getElementById('volumeSlider').value / 100;
+                if (isPlaying) {
+                    currentAudio.play().catch(e => {});
+                }
+            }
+        }
+
+        // ==================== AUTH FUNCTIONS ====================
+        function handleRegister(e) {
+            e.preventDefault();
+
+      const name = document.getElementById('regName').value;
+            const kelas = document.getElementById('regClass').value;
+            const sekolah = document.getElementById('regSchool').value;
+            const email = document.getElementById('regEmail').value;
+            const phone = document.getElementById('regPhone').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+            if (password !== confirmPassword) {
+                showToast('Password tidak cocok!', false);
+                return;
+            }
+
+            const users = getUsers();
+            if (users.find(u => u.email === email)) {
+                showToast('Email sudah terdaftar!', false);
+                return;
+            }
+
+            const newUser = {
+                id: Date.now(),
+                name,
+                kelas,
+                sekolah,
+                email,
+                phone,
+                password,
+                quizCompleted: false,
+                score: 0,
+                status: 'pending',
+                timeTaken: 0,
+                createdAt: new Date().toISOString()
+            };
+
+            users.push(newUser);
+            saveUsers(users);
+            
+            showToast('Registrasi berhasil! Silakan login.');
+            hideModal('registerModal');
+            showModal('loginModal');
+            
+            e.target.reset();
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+
+      const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const users = getUsers();
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('kartini_current_user', JSON.stringify(user));
+                hideModal('loginModal');
+                showToast(`Selamat datang, ${user.name}!`);
+                
+                if (user.quizCompleted) {
+                    showPage('resultPage');
+                } else {
+                    startStory();
+                }
+            } else {
+                showToast('Email atau password salah!', false);
+            }
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
+                isAdmin = true;
+                hideModal('adminLoginModal');
+                showPage('adminDashboard');
+                loadAdminData();
+                showToast('Selamat datang, Admin!');
+            } else {
+                showToast('Kredensial admin salah!', false);
+            }
+        }
+
+        function adminLogout() {
+            isAdmin = false;
+            showPage('landingPage');
+            showToast('Berhasil logout');
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('kartini_current_user');
+            showPage('landingPage');
+            showToast('Berhasil logout');
+          }
+
+        // ==================== STORY FUNCTIONS ====================
+        function startStory() {
+            if (!currentUser) {
+                showModal('loginModal');
+                return;
+            }
+            
+            showPage('storyPage');
+            currentScene = 1;
+            document.getElementById('userName').textContent = currentUser.name;
+            updateScene();
+            
+            if (!isPlaying) {
+                togglePlay();
+            }
+            
+            // Initialize scroll observer
+            initScrollObserver();
+        }
+
+        function exitStory() {
+            if (confirm('Yakin ingin keluar dari cerita? Progress tidak akan disimpan.')) {
+                showPage('landingPage');
+            }
+        }
+
+        function exitToHome() {
+            showPage('landingPage');
+            updateStats();
+        }
+
+        function updateScene() {
+            document.getElementById('currentScene').textContent = currentScene;
+            switchAudio(currentScene);
+        }
+
+        function initScrollObserver() {
+            const sections = document.querySelectorAll('.story-section');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        
+                        // Get scene number
+                        const sceneNum = parseInt(entry.target.id.replace('scene', ''));
+                        currentScene = sceneNum;
+                        updateScene();
+
+      // Update progress bar
+                        const progress = (sceneNum / 6) * 100;
+                        document.getElementById('storyProgress').style.width = progress + '%';
+                        
+                        // Show choices at specific scenes
+                        if (sceneNum === 3) {
+                            setTimeout(() => {
+                                document.getElementById('choice1').style.display = 'block';
+                            }, 3000);
+                        }
+                        if (sceneNum === 4) {
+                            setTimeout(() => {
+                                document.getElementById('choice2').style.display = 'block';
+                            }, 3000);
+                        }
+                        if (sceneNum === 6) {
+                            setTimeout(() => {
+                                document.getElementById('storyEnd').style.display = 'block';
+                            }, 3000);
+                        }
+                    }
+                });
+            }, {
+                threshold: 0.5
+            });
+            
+            sections.forEach(section => observer.observe(section));
+        }
+
+        function makeChoice(choiceNum, option) {
+            storyChoices[`choice${choiceNum}`] = option;
+            
+            // Update UI
+            const choiceContainer = document.getElementById(`choice${choiceNum}`);
+            const cards = choiceContainer.querySelectorAll('.choice-card');
+            cards.forEach((card, index) => {
+                if ((option === 'a' && index === 0) || (option === 'b' && index === 1)) {
+                    card.classList.add('selected');
+                }
+                card.style.pointerEvents = 'none';
+            });
+            
+            showToast('Pilihan disimpan!');
+        }
+
+        // ==================== QUIZ FUNCTIONS ====================
+        function startQuiz() {
+            showPage('quizPage');
+            currentQuestionIndex = 0;
+            quizAnswers = {};
+          quizStartTime = Date.now();
+            
+            const questions = getQuestions();
+            document.getElementById('totalQuestions').textContent = questions.length;
+            
+            // Start timer
+            startQuizTimer();
+            
+            // Load first question
+            loadQuestion(0);
+        }
+
+        function startQuizTimer() {
+            const totalTime = 10 * 60; // 10 minutes
+            let timeRemaining = totalTime;
+            
+            quizTimerInterval = setInterval(() => {
+                const minutes = Math.floor(timeRemaining / 60);
+                const seconds = timeRemaining % 60;
+                document.getElementById('quizTimer').textContent = 
+                    `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(quizTimerInterval);
+                    submitQuiz();
+                }
+                
+                timeRemaining--;
+            }, 1000);
+        }
+
+        function loadQuestion(index) {
+            const questions = getQuestions();
+            const question = questions[index];
+            
+            document.getElementById('currentQuestion').textContent = index + 1;
+            document.getElementById('questionText').textContent = question.question;
+            
+            const progressPercent = ((index + 1) / questions.length) * 100;
+            document.getElementById('quizProgress').style.width = progressPercent + '%';
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            const optionLabels = ['A', 'B', 'C', 'D'];
+            question.options.forEach((opt, i) => {
+                const div = document.createElement('div');
+                div.className = 'quiz-option';
+                div.dataset.value = optionLabels[i];
+              div.onclick = () => selectOption(optionLabels[i]);
+                
+                if (quizAnswers[index] === optionLabels[i]) {
+                    div.classList.add('selected');
+                }
+                
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-full flex items-center justify-center text-sm" style="background: rgba(212, 175, 55, 0.1); color: var(--gold);">${optionLabels[i]}</span>
+                        <span>${opt}</span>
+                    </div>
+                `;
+                optionsContainer.appendChild(div);
+            });
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').textContent = index === questions.length - 1 ? 'Selesai' : 'Selanjutnya';
+        }
+
+        function selectOption(value) {
+            quizAnswers[currentQuestionIndex] = value;
+            
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.classList.remove('selected');
+                if (opt.dataset.value === value) {
+                    opt.classList.add('selected');
+                }
+            });
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion(currentQuestionIndex);
+            }
+        }
+
+        function nextQuestion() {
+            const questions = getQuestions();
+            
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion(currentQuestionIndex);
+            } else {
+                submitQuiz();
+            }
+      }
+      
+      function submitQuiz() {
+            clearInterval(quizTimerInterval);
+            
+            const questions = getQuestions();
+            let correctCount = 0;
+            
+            questions.forEach((q, i) => {
+                if (quizAnswers[i] === q.correct) {
+                    correctCount++;
+                }
+            });
+            
+            const score = Math.round((correctCount / questions.length) * 100);
+            const timeTaken = Math.floor((Date.now() - quizStartTime) / 1000);
+            
+            // Save answer record
+            const answers = getAnswers();
+            answers.push({
+                id: Date.now(),
+                userId: currentUser.id,
+                userName: currentUser.name,
+                userClass: currentUser.kelas,
+                answers: quizAnswers,
+                score,
+                correctCount,
+                totalQuestions: questions.length,
+                timeTaken,
+                status: 'pending',
+                submittedAt: new Date().toISOString()
+            });
+            saveAnswers(answers);
+            
+            // Update user
+            const users = getUsers();
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex].quizCompleted = true;
+                users[userIndex].score = score;
+                users[userIndex].status = 'pending';
+                users[userIndex].timeTaken = timeTaken;
+                saveUsers(users);
+                currentUser = users[userIndex];
+                localStorage.setItem('kartini_current_user', JSON.stringify(currentUser));
+            }
+            
+            showPage('resultPage');
+      }
+
+      // ==================== LEADERBOARD FUNCTIONS ====================
+        function goToLeaderboard() {
+            showPage('leaderboardPage');
+            loadLeaderboard();
+        }
+
+        function loadLeaderboard() {
+            const answers = getAnswers();
+            const publishedAnswers = answers.filter(a => a.status === 'published');
+            
+            // Sort by score (desc) and time (asc)
+            publishedAnswers.sort((a, b) => {
+                if (b.score !== a.score) return b.score - a.score;
+                return a.timeTaken - b.timeTaken;
+            });
+            
+            const topThree = document.getElementById('topThree');
+            const leaderboardList = document.getElementById('leaderboardList');
+            
+            // Top 3
+            topThree.innerHTML = '';
+            for (let i = 0; i < Math.min(3, publishedAnswers.length); i++) {
+                const entry = publishedAnswers[i];
+                const rankColors = ['var(--gold)', '#C0C0C0', '#CD7F32'];
+                const rankLabels = ['1st', '2nd', '3rd'];
+                
+                topThree.innerHTML += `
+                    <div class="glass rounded-xl p-6 text-center ${i === 0 ? 'md:order-2' : i === 1 ? 'md:order-1' : 'md:order-3'}">
+                        <div class="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center text-xl font-bold" style="background: ${rankColors[i]}; color: var(--bg-primary);">
+                            ${i + 1}
+                        </div>
+                        <p class="font-medium mb-1" style="color: var(--cream);">${entry.userName}</p>
+                        <p class="text-xs mb-2" style="color: var(--text-muted);">${entry.userClass}</p>
+                        <p class="heading text-2xl" style="color: var(--gold);">${entry.score}</p>
+                        <p class="text-xs" style="color: var(--text-muted);">poin</p>
+                    </div>
+                `;
+            }
+            
+            // Rest of list
+            leaderboardList.innerHTML = '';
+            for (let i = 3; i < publishedAnswers.length; i++) {
+                const entry = publishedAnswers[i];
+                leaderboardList.innerHTML += `
+                    <div class="leaderboard-item">
+                        <span class="rank-badge" style="background: rgba(212, 175, 55, 0.1); color: var(--text-muted);">${i + 1}</span>
+                        <div class="flex-1">
+                            <p class="font-medium" style="color: var(--cream);">${entry.userName}</p>
+                            <p class="text-xs" style="color: var(--text-muted);">${entry.userClass}</p>
+                        </div>
+                        <span class="font-semibold" style="color: var(--gold);">${entry.score}</span>
+                    </div>
+                `;
+            }
+        }
+
+        // ==================== ADMIN FUNCTIONS ====================
+        function loadAdminData() {
+            updateAdminStats();
+            loadUsersTable();
+            loadQuestionsAdmin();
+            loadAnswersAdmin();
+            loadRankingTable();
+        }
+
+        function showAdminTab(tab) {
+            const tabs = ['dashboard', 'users', 'questions', 'answers', 'ranking'];
+            tabs.forEach(t => {
+                document.getElementById(`admin${t.charAt(0).toUpperCase() + t.slice(1)}Tab`).style.display = 'none';
+            });
+            document.getElementById(`admin${tab.charAt(0).toUpperCase() + tab.slice(1)}Tab`).style.display = 'block';
+            
+            // Update sidebar buttons
+            const buttons = document.querySelectorAll('#adminSidebar button');
+            buttons.forEach(btn => {
+                btn.style.background = 'transparent';
+                btn.style.color = 'var(--text-muted)';
+            });
+            event.target.style.background = 'rgba(212, 175, 55, 0.1)';
+            event.target.style.color = 'var(--gold)';
+        }
+
+        function updateAdminStats() {
+            const users = getUsers();
+            const answers = getAnswers();
+            const completed = answers.length;
+            const pending = answers.filter(a => a.status === 'pending').length;
+            const average = completed > 0 ? Math.round(answers.reduce((sum, a) => sum + a.score, 0) / completed) : 0;
+            
+            document.getElementById('adminStatUsers').textContent = users.length;
+            document.getElementById('adminStatCompleted').textContent = completed;
+            document.getElementById('adminStatAverage').textContent = average;
+            document.getElementById('adminStatPending').textContent = pending;
+            
+            // Update chart
+            drawScoreChart(answers);
+            
+            // Hardest questions
+            updateHardestQuestions(answers);
+          }
+
+        function drawScoreChart(answers) {
+            const canvas = document.getElementById('scoreChart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Create histogram buckets
+            const buckets = [0, 0, 0, 0, 0]; // 0-20, 21-40, 41-60, 61-80, 81-100
+            answers.forEach(a => {
+                if (a.score <= 20) buckets[0]++;
+                else if (a.score <= 40) buckets[1]++;
+                else if (a.score <= 60) buckets[2]++;
+                else if (a.score <= 80) buckets[3]++;
+                else buckets[4]++;
+            });
+            
+            const maxBucket = Math.max(...buckets, 1);
+            const barWidth = 40;
+            const gap = 20;
+            const startX = 30;
+            const chartHeight = 150;
+            const labels = ['0-20', '21-40', '41-60', '61-80', '81-100'];
+            
+            buckets.forEach((count, i) => {
+                const barHeight = Math.max(1, (count / maxBucket) * chartHeight);
+                const x = startX + i * (barWidth + gap);
+                const y = chartHeight - barHeight;
+                
+                ctx.fillStyle = 'rgba(212, 175, 55, 0.6)';
+                ctx.fillRect(x, y + 20, barWidth, barHeight);
+                
+                ctx.fillStyle = '#C4A97A';
+                ctx.font = '10px Montserrat';
+                ctx.textAlign = 'center';
+                ctx.fillText(labels[i], x + barWidth/2, chartHeight + 40);
+                ctx.fillText(count.toString(), x + barWidth/2, y + 15);
+            });
+        }
+
+        function updateHardestQuestions(answers) {
+            const questions = getQuestions();
+            const wrongCounts = questions.map((q, i) => {
+                const wrong = answers.filter(a => a.answers[i] !== q.correct).length;
+                return { index: i, wrong, question: q.question };
+            });
+
+      wrongCounts.sort((a, b) => b.wrong - a.wrong);
+            
+            const container = document.getElementById('hardestQuestions');
+            container.innerHTML = '';
+            
+            wrongCounts.slice(0, 3).forEach((item, i) => {
+                container.innerHTML += `
+                    <div class="flex items-center justify-between p-3 rounded-lg" style="background: rgba(196, 69, 54, 0.1);">
+                        <span class="text-sm" style="color: var(--text-secondary);">${item.question.substring(0, 40)}...</span>
+                        <span class="text-sm font-medium" style="color: var(--danger);">${item.wrong} salah</span>
+                    </div>
+                `;
+            });
+        }
+
+        function loadUsersTable() {
+            const users = getUsers();
+            const tbody = document.getElementById('usersTableBody');
+            tbody.innerHTML = '';
+            
+            users.forEach(user => {
+                const statusColor = user.quizCompleted ? 'var(--success)' : 'var(--text-muted)';
+                const statusText = user.quizCompleted ? 'Selesai' : 'Belum';
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="color: var(--cream);">${user.name}</td>
+                        <td style="color: var(--text-secondary);">${user.kelas}</td>
+                        <td style="color: var(--text-secondary);">${user.sekolah}</td>
+                        <td><span class="badge" style="background: ${statusColor}; color: var(--bg-primary);">${statusText}</span></td>
+                        <td>
+                            <button class="text-xs underline mr-2" style="color: var(--gold);" onclick="editUser(${user.id})">Edit</button>
+                            <button class="text-xs underline" style="color: var(--danger);" onclick="deleteUser(${user.id})">Hapus</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function loadQuestionsAdmin() {
+            const questions = getQuestions();
+            const container = document.getElementById('questionsListAdmin');
+            container.innerHTML = '';
+            
+            questions.forEach((q, i) => {
+                container.innerHTML += `
+                    <div class="glass-light rounded-lg p-6">
+                        <div class="flex items-start justify-between">
+                            <div>
+                            <p class="text-sm mb-2" style="color: var(--text-muted);">Soal #${i + 1}</p>
+                                <p style="color: var(--cream);">${q.question}</p>
+                                <div class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2">
+                                    ${['A', 'B', 'C', 'D'].map(label => `
+                                        <div class="p-2 rounded text-xs ${q.correct === label ? 'border border-green-500' : ''}" style="background: rgba(212, 175, 55, 0.05);">
+                                            <span style="color: var(--gold);">${label}.</span> ${q.options[['A', 'B', 'C', 'D'].indexOf(label)]}
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="text-xs underline" style="color: var(--gold);" onclick="editQuestion(${q.id})">Edit</button>
+                                <button class="text-xs underline" style="color: var(--danger);" onclick="deleteQuestion(${q.id})">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function loadAnswersAdmin() {
+            const answers = getAnswers();
+            const container = document.getElementById('answersListAdmin');
+            container.innerHTML = '';
+            
+            if (answers.length === 0) {
+                container.innerHTML = '<p class="text-center py-8" style="color: var(--text-muted);">Belum ada jawaban user</p>';
+                return;
+            }
+            
+            answers.forEach(a => {
+                const statusColor = a.status === 'published' ? 'var(--success)' : 'var(--gold)';
+                const statusText = a.status === 'published' ? 'Published' : 'Pending';
+                
+                container.innerHTML += `
+                    <div class="glass-light rounded-lg p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <p class="font-medium" style="color: var(--cream);">${a.userName}</p>
+                                <p class="text-xs" style="color: var(--text-muted);">${a.userClass} - ${new Date(a.submittedAt).toLocaleDateString('id-ID')}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="heading text-2xl" style="color: var(--gold);">${a.score}</p>
+                                <span class="badge" style="background: ${statusColor}; color: var(--bg-primary);">${statusText}</span>
+                            </div>
+                        </div>
+                        <p class="text-sm" style="color: var(--text-secondary);">Benar: ${a.correctCount}/${a.totalQuestions} | Waktu: ${Math.floor(a.timeTaken / 60)}:${(a.timeTaken % 60).toString().padStart(2, '0')}</p>
+                    </div>
+                `;
+            });
+          }
+
+        function loadRankingTable() {
+            const answers = getAnswers();
+            answers.sort((a, b) => {
+                if (b.score !== a.score) return b.score - a.score;
+                return a.timeTaken - b.timeTaken;
+            });
+            
+            const tbody = document.getElementById('rankingTableBody');
+            tbody.innerHTML = '';
+            
+            answers.forEach((a, i) => {
+                const statusColor = a.status === 'published' ? 'var(--success)' : 'var(--gold)';
+                const statusText = a.status === 'published' ? 'Published' : 'Pending';
+                
+                const minutes = Math.floor(a.timeTaken / 60);
+                const seconds = a.timeTaken % 60;
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td><span class="rank-badge ${i < 3 ? 'rank-' + (i + 1) : ''}" style="${i >= 3 ? 'background: rgba(212, 175, 55, 0.1); color: var(--text-muted);' : ''}">${i + 1}</span></td>
+                        <td style="color: var(--cream);">${a.userName}</td>
+                        <td style="color: var(--text-secondary);">${a.userClass}</td>
+                        <td style="color: var(--gold);">${a.score}</td>
+                        <td style="color: var(--text-secondary);">${minutes}:${seconds.toString().padStart(2, '0')}</td>
+                        <td><span class="badge" style="background: ${statusColor}; color: var(--bg-primary);">${statusText}</span></td>
+                        <td>
+                            <button class="text-xs underline" style="color: var(--gold);" onclick="openEditScore(${a.userId}, ${a.score}, '${a.status}')">Edit</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function openEditScore(userId, score, status) {
+            document.getElementById('editScoreUserId').value = userId;
+            document.getElementById('editScoreValue').value = score;
+            document.getElementById('editScoreStatus').value = status;
+            showModal('editScoreModal');
+        }
+
+        function handleEditScore(e) {
+            e.preventDefault();
+            
+            const userId = parseInt(document.getElementById('editScoreUserId').value);
+            const newScore = parseInt(document.getElementById('editScoreValue').value);
+            const newStatus = document.getElementById('editScoreStatus').value;
+            
+            // Update answers
+      const answers = getAnswers();
+            const answerIndex = answers.findIndex(a => a.userId === userId);
+            if (answerIndex !== -1) {
+                answers[answerIndex].score = newScore;
+                answers[answerIndex].status = newStatus;
+                saveAnswers(answers);
+            }
+            
+            // Update user
+            const users = getUsers();
+            const userIndex = users.findIndex(u => u.id === userId);
+            if (userIndex !== -1) {
+                users[userIndex].score = newScore;
+                users[userIndex].status = newStatus;
+                saveUsers(users);
+            }
+            
+            hideModal('editScoreModal');
+            loadAdminData();
+            showToast('Nilai berhasil diupdate!');
+        }
+
+        function handleAddQuestion(e) {
+            e.preventDefault();
+            
+            const question = document.getElementById('questionInput').value;
+            const options = [
+                document.getElementById('optA').value,
+                document.getElementById('optB').value,
+                document.getElementById('optC').value,
+                document.getElementById('optD').value
+            ];
+            const correct = document.getElementById('correctAnswer').value;
+            
+            const questions = getQuestions();
+            questions.push({
+                id: Date.now(),
+                question,
+                options,
+                correct
+            });
+            saveQuestions(questions);
+            
+            hideModal('addQuestionModal');
+            loadQuestionsAdmin();
+            showToast('Soal berhasil ditambahkan!');
+            
+            e.target.reset();
+  }
+
+      function deleteUser(id) {
+            if (!confirm('Yakin ingin menghapus user ini?')) return;
+            
+            const users = getUsers().filter(u => u.id !== id);
+            saveUsers(users);
+            
+            const answers = getAnswers().filter(a => a.userId !== id);
+            saveAnswers(answers);
+            
+            loadAdminData();
+            showToast('User berhasil dihapus!');
+        }
+
+        function deleteQuestion(id) {
+            if (!confirm('Yakin ingin menghapus soal ini?')) return;
+            
+            const questions = getQuestions().filter(q => q.id !== id);
+            saveQuestions(questions);
+            
+            loadQuestionsAdmin();
+            showToast('Soal berhasil dihapus!');
+        }
+
+        // ==================== STATS UPDATE ====================
+        function updateStats() {
+            const users = getUsers();
+            document.getElementById('statUsers').textContent = users.length;
+        }
+
+        // ==================== PARTICLES ====================
+        function createParticles() {
+            const container = document.getElementById('particles');
+            if (!container) return;
+            
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (6 + Math.random() * 4) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // ==================== PARALLAX ====================
+        function initParallax() {
+            window.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                
+                for (let i = 1; i <= 6; i++) {
+                  const parallax = document.getElementById(`parallax${i}`);
+                    if (parallax) {
+                        parallax.style.transform = `translateY(${scrollY * 0.3}px)`;
+                    }
+                }
+            });
+        }
+
+        // ==================== NAV SCROLL ====================
+        function initNavScroll() {
+            window.addEventListener('scroll', () => {
+                const nav = document.getElementById('mainNav');
+                if (nav) {
+                    if (window.scrollY > 50) {
+                        nav.classList.add('scrolled');
+                    } else {
+                        nav.classList.remove('scrolled');
+                    }
+                }
+            });
+        }
+
+        // ==================== TEXT REVEAL ====================
+        function initTextReveal() {
+            const paragraphs = document.querySelectorAll('.story-text p');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.classList.add('visible');
+                        }, index * 200);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            paragraphs.forEach(p => {
+                p.classList.add('reveal-text');
+                observer.observe(p);
+            });
+        }
+
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize data
+            initializeData();
+            
+            // Create particles
+            createParticles();
+
+              // Initialize audio
+            initAudio();
+            
+            // Initialize nav scroll
+            initNavScroll();
+            
+            // Initialize parallax
+            initParallax();
+            
+            // Update stats
+            updateStats();
+            
+            // Hide loading screen
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('hidden');
+            }, 1500);
+            
+            // Check for logged in user
+            const savedUser = localStorage.getItem('kartini_current_user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+            }
+        });
+
+        // Handle reduced motion
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.querySelectorAll('.particle').forEach(p => p.remove());
+        }
+    </script>
+</body>
+</html>                    
